@@ -14,11 +14,6 @@ ELAB_TAG("win_example");
 
 int main(void) {
     elog_info("Hello eLab!");
-    elog_debug("This is a debug message.");
-    elog_warn("This is a warning message.");
-    elog_error("This is an error message.");
-
-
     elab_run();
 
     return 0;
