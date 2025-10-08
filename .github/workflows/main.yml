@@ -34,7 +34,8 @@ jobs:
         # 创建 expect 脚本来处理交互式程序并检测测试结果
         cat > run_unity_test.exp << 'EOF'
         #!/usr/bin/expect -f
-        set timeout 30 #匹配Unity测试结果超时时间
+        # 匹配Unity测试结果超时时间
+        set timeout 30
         
         # 启动程序
         spawn sudo ./unity_example
