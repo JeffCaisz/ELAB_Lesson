@@ -31,7 +31,7 @@ jobs:
     - name: Run unity_test
       run: |
         cd 7.ELAB_NANO_Unity/example/unity_test/build
-        ./unity_example
+        echo "unity" | sudo ./unity_example
       continue-on-error: true
     
     - name: Upload build artifacts
