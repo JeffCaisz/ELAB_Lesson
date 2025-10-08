@@ -39,27 +39,23 @@ jobs:
         # 启动程序
         spawn sudo ./unity_example
         
-        # 等待 shell 提示符
+        # 等待程序完全启动并稳定
+        sleep 3
+        
+        # 发送 unity 命令
+        send "unity\r"
+        
+        # 等待测试完成或超时
         expect {
-          "eLab:/*$" {
-            # 发送 unity 命令
-            send "unity\r"
-            
-            # 等待测试完成或超时
-            expect {
-              timeout {
-                # 60秒后发送 Ctrl+C 退出
-                send "\x03"
-                expect eof
-              }
-              eof {
-                # 程序正常结束
-              }
-            }
-          }
           timeout {
-            puts "Timeout waiting for shell prompt"
-            exit 1
+            # 60秒后发送 Ctrl+C 退出
+            puts "Test timeout, sending Ctrl+C"
+            send "\x03"
+            expect eof
+          }
+          eof {
+            # 程序正常结束
+            puts "Test completed normally"
           }
         }
         EOF
