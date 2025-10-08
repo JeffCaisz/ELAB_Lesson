@@ -31,14 +31,45 @@ jobs:
     - name: Run unity_test
       run: |
         cd 7.ELAB_NANO_Unity/example/unity_test/build
-        # 创建输入文件
-        echo "unity" > input.txt
+        # 创建 expect 脚本来处理交互式程序
+        cat > run_unity_test.exp << 'EOF'
+        #!/usr/bin/expect -f
+        set timeout 60
         
-        # 使用 timeout 和输入重定向
-        timeout 60 sudo ./unity_example < input.txt 
+        # 启动程序
+        spawn sudo ./unity_example
+        
+        # 等待 shell 提示符
+        expect {
+          "eLab:/*$" {
+            # 发送 unity 命令
+            send "unity\r"
+            
+            # 等待测试完成或超时
+            expect {
+              timeout {
+                # 60秒后发送 Ctrl+C 退出
+                send "\x03"
+                expect eof
+              }
+              eof {
+                # 程序正常结束
+              }
+            }
+          }
+          timeout {
+            puts "Timeout waiting for shell prompt"
+            exit 1
+          }
+        }
+        EOF
+        
+        # 运行 expect 脚本
+        chmod +x run_unity_test.exp
+        ./run_unity_test.exp
         
         # 清理
-        rm -f input.txt
+        rm -f run_unity_test.exp
       continue-on-error: true
     
     - name: Upload build artifacts
