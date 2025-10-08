@@ -16,7 +16,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y cmake build-essential
+        sudo apt-get install -y cmake build-essential expect
     
     - name: Configure CMake for unity_test
       run: |
@@ -31,7 +31,14 @@ jobs:
     - name: Run unity_test
       run: |
         cd 7.ELAB_NANO_Unity/example/unity_test/build
-        printf "unity\nquit\n" | timeout 30 sudo ./unity_example || true
+        # 创建输入文件
+        echo "unity" > input.txt
+        
+        # 使用 timeout 和输入重定向
+        timeout 60 sudo ./unity_example < input.txt 
+        
+        # 清理
+        rm -f input.txt
       continue-on-error: true
     
     - name: Upload build artifacts
