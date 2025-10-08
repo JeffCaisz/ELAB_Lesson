@@ -34,7 +34,7 @@ jobs:
         # 创建 expect 脚本来处理交互式程序并检测测试结果
         cat > run_unity_test.exp << 'EOF'
         #!/usr/bin/expect -f
-        set timeout 60
+        set timeout 30 #匹配Unity测试结果超时时间
         
         # 启动程序
         spawn sudo ./unity_example
@@ -58,27 +58,31 @@ jobs:
             puts "Failures: $failures" 
             puts "Ignored: $ignored"
             
-            # 继续等待最终状态
+            # 继续等待最终状态 (OK/FAIL)
             expect {
               "OK" {
                 puts "Status: PASSED (All tests successful)"
                 puts "=========================\n"
                 send "\x03"
-                expect eof
+                # 给程序一点时间响应 Ctrl+C
+                sleep 2
                 exit 0
               }
               "FAIL" {
                 puts "Status: FAILED (Some tests failed)"
                 puts "=========================\n"
                 send "\x03"
-                expect eof
+                # 给程序一点时间响应 Ctrl+C
+                sleep 2
                 exit 1
               }
               timeout {
-                puts "Status: TIMEOUT"
+                puts "Status: TIMEOUT (No final status received)"
+                puts "Trying to terminate program gracefully..."
                 puts "=========================\n"
                 send "\x03"
-                expect eof
+                # 给程序一点时间响应 Ctrl+C
+                sleep 2
                 exit 1
               }
             }
@@ -88,8 +92,11 @@ jobs:
           timeout {
             puts "\n=== Unity Test Results ==="
             puts "Status: TIMEOUT - No test results detected"
+            puts "Trying to terminate program gracefully..."
             puts "=========================\n"
             send "\x03"
+            # 给程序一点时间响应 Ctrl+C
+            sleep 2
             expect eof
             exit 1
           }
@@ -108,8 +115,11 @@ jobs:
         if ./run_unity_test.exp; then
           echo "✅ Unity tests PASSED: All tests completed successfully!"
         else
-          echo "❌ Unity tests FAILED: Some tests failed or the process timed out!"
-          echo "Please check the test output above for details."
+          echo "❌ Unity tests FAILED: Check the detailed results above"
+          echo "   Possible reasons:"
+          echo "   - Some unit tests failed"
+          echo "   - Test execution timed out"
+          echo "   - Program crashed or hung"
           exit 1
         fi
         
