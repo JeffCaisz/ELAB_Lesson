@@ -31,7 +31,7 @@ jobs:
     - name: Run unity_test
       run: |
         cd 7.ELAB_NANO_Unity/example/unity_test/build
-        # 创建 expect 脚本来处理交互式程序
+        # 创建 expect 脚本来处理交互式程序并检测测试结果
         cat > run_unity_test.exp << 'EOF'
         #!/usr/bin/expect -f
         set timeout 60
@@ -45,29 +45,77 @@ jobs:
         # 发送 unity 命令
         send "unity\r"
         
-        # 等待测试完成或超时
+        # 等待测试结果
         expect {
+          # 匹配成功的测试结果
+          -re {([0-9]+) Tests ([0-9]+) Failures ([0-9]+) Ignored} {
+            set tests $expect_out(1,string)
+            set failures $expect_out(2,string)
+            set ignored $expect_out(3,string)
+            
+            puts "\n=== Unity Test Results ==="
+            puts "Tests: $tests"
+            puts "Failures: $failures" 
+            puts "Ignored: $ignored"
+            
+            # 继续等待最终状态
+            expect {
+              "OK" {
+                puts "Status: PASSED (All tests successful)"
+                puts "=========================\n"
+                send "\x03"
+                expect eof
+                exit 0
+              }
+              "FAIL" {
+                puts "Status: FAILED (Some tests failed)"
+                puts "=========================\n"
+                send "\x03"
+                expect eof
+                exit 1
+              }
+              timeout {
+                puts "Status: TIMEOUT"
+                puts "=========================\n"
+                send "\x03"
+                expect eof
+                exit 1
+              }
+            }
+          }
+          
+          # 如果没有匹配到测试结果格式
           timeout {
-            # 60秒后发送 Ctrl+C 退出
-            puts "Test timeout, sending Ctrl+C"
+            puts "\n=== Unity Test Results ==="
+            puts "Status: TIMEOUT - No test results detected"
+            puts "=========================\n"
             send "\x03"
             expect eof
+            exit 1
           }
+          
           eof {
-            # 程序正常结束
-            puts "Test completed normally"
+            puts "\n=== Unity Test Results ==="
+            puts "Status: COMPLETED - Check output above for results"
+            puts "=========================\n"
+            exit 0
           }
         }
         EOF
         
-        # 运行 expect 脚本
+        # 运行 expect 脚本并捕获退出码
         chmod +x run_unity_test.exp
-        ./run_unity_test.exp
+        if ./run_unity_test.exp; then
+          echo "✅ Unity tests PASSED: All tests completed successfully!"
+        else
+          echo "❌ Unity tests FAILED: Some tests failed or the process timed out!"
+          echo "Please check the test output above for details."
+          exit 1
+        fi
         
         # 清理
         rm -f run_unity_test.exp
-      continue-on-error: true
-    
+        #continue-on-error: true  #测试流在出现错误时也会继续 (不报错)
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
