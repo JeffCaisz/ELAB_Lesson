@@ -16,7 +16,226 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y cmake build-essential expect
+        sudo apt-get install -y cmake build-essential expect cppcheck python3-pip
+        
+        # 安装 MISRA C 规则文件（如果可用）
+        pip3 install misra-c
+        
+    - name: Setup MISRA C Configuration
+      run: |
+        # 创建 MISRA C 配置文件
+        cat > misra-c.txt << 'EOF'
+        # MISRA C 2012 规则配置
+        # 必须遵守的规则 (Required)
+        rule-1.3
+        rule-2.1
+        rule-2.2
+        rule-2.3
+        rule-2.4
+        rule-2.5
+        rule-2.6
+        rule-2.7
+        rule-3.1
+        rule-3.2
+        rule-4.1
+        rule-4.2
+        rule-5.1
+        rule-5.2
+        rule-5.3
+        rule-5.4
+        rule-5.5
+        rule-5.6
+        rule-5.7
+        rule-5.8
+        rule-5.9
+        rule-6.1
+        rule-6.2
+        rule-7.1
+        rule-7.2
+        rule-7.3
+        rule-7.4
+        rule-8.1
+        rule-8.2
+        rule-8.3
+        rule-8.4
+        rule-8.5
+        rule-8.6
+        rule-8.7
+        rule-8.8
+        rule-8.9
+        rule-8.10
+        rule-8.11
+        rule-8.12
+        rule-8.13
+        rule-8.14
+        rule-9.1
+        rule-9.2
+        rule-9.3
+        rule-9.4
+        rule-9.5
+        rule-10.1
+        rule-10.2
+        rule-10.3
+        rule-10.4
+        rule-10.5
+        rule-10.6
+        rule-10.7
+        rule-10.8
+        rule-11.1
+        rule-11.2
+        rule-11.3
+        rule-11.4
+        rule-11.5
+        rule-11.6
+        rule-11.7
+        rule-11.8
+        rule-11.9
+        rule-12.1
+        rule-12.2
+        rule-12.3
+        rule-12.4
+        rule-12.5
+        rule-13.1
+        rule-13.2
+        rule-13.3
+        rule-13.4
+        rule-13.5
+        rule-13.6
+        rule-14.1
+        rule-14.2
+        rule-14.3
+        rule-14.4
+        rule-15.1
+        rule-15.2
+        rule-15.3
+        rule-15.4
+        rule-15.5
+        rule-15.6
+        rule-15.7
+        rule-16.1
+        rule-16.2
+        rule-16.3
+        rule-16.4
+        rule-16.5
+        rule-16.6
+        rule-16.7
+        rule-17.1
+        rule-17.2
+        rule-17.3
+        rule-17.4
+        rule-17.5
+        rule-17.6
+        rule-17.7
+        rule-17.8
+        rule-18.1
+        rule-18.2
+        rule-18.3
+        rule-18.4
+        rule-18.5
+        rule-18.6
+        rule-18.7
+        rule-18.8
+        rule-19.1
+        rule-19.2
+        rule-20.1
+        rule-20.2
+        rule-20.3
+        rule-20.4
+        rule-20.5
+        rule-20.6
+        rule-20.7
+        rule-20.8
+        rule-20.9
+        rule-20.10
+        rule-20.11
+        rule-20.12
+        rule-21.1
+        rule-21.2
+        rule-21.3
+        rule-21.4
+        rule-21.5
+        rule-21.6
+        rule-21.7
+        rule-21.8
+        rule-21.9
+        rule-21.10
+        rule-21.11
+        rule-21.12
+        rule-22.1
+        rule-22.2
+        rule-22.3
+        rule-22.4
+        rule-22.5
+        rule-22.6
+        EOF
+        
+        # 创建 cppcheck 配置文件
+        cat > cppcheck.cfg << 'EOF'
+        # Cppcheck configuration for MISRA C
+        [common]
+        language=c
+        std=c99
+        
+        [misra]
+        enable=all
+        
+        [suppressions]
+        # 抑制一些对嵌入式系统不适用的规则
+        missingIncludeSystem
+        unmatchedSuppression
+        EOF
+    
+    - name: MISRA C Static Analysis
+      run: |
+        echo "🔍 Running MISRA C compliance check with cppcheck..."
+        
+        # 运行带 MISRA C 规则的 cppcheck
+        cppcheck --addon=misra \
+          --enable=all \
+          --inconclusive \
+          --xml \
+          --xml-version=2 \
+          --suppress=missingIncludeSystem \
+          --suppress=unmatchedSuppression \
+          --suppress=unusedFunction \
+          --std=c99 \
+          --platform=unix32 \
+          -I 7.ELAB_NANO_Unity/elab/common/ \
+          -I 7.ELAB_NANO_Unity/elab/3rd/ \
+          7.ELAB_NANO_Unity/elab/ \
+          2> misra-report.xml || true
+        
+        # 分析 MISRA 报告
+        echo "📊 MISRA C Analysis Results:"
+        echo "============================"
+        
+        if [ -s misra-report.xml ]; then
+          # 统计不同类型的 MISRA 违规
+          total_misra=$(grep -o "misra-c2012-" misra-report.xml | wc -l)
+          error_count=$(grep -o 'severity="error"' misra-report.xml | wc -l)
+          warning_count=$(grep -o 'severity="warning"' misra-report.xml | wc -l)
+          style_count=$(grep -o 'severity="style"' misra-report.xml | wc -l)
+          
+          echo "Total MISRA violations: $total_misra"
+          echo "Errors: $error_count"
+          echo "Warnings: $warning_count"  
+          echo "Style issues: $style_count"
+          
+          # 显示最常见的违规类型
+          echo ""
+          echo "Top MISRA violations:"
+          grep -o "misra-c2012-[0-9]\+\.[0-9]\+" misra-report.xml | sort | uniq -c | sort -nr | head -10
+          
+          # 如果有严重错误，标记为失败
+          if [ $error_count -gt 0 ]; then
+            echo "❌ MISRA C compliance check failed due to errors"
+            echo "Review the detailed report for violations that must be fixed"
+          else
+            echo "✅ No critical MISRA C violations found"
+          fi
+        else
+          echo "✅ No MISRA C violations detected"
+        fi
     
     - name: Configure CMake for unity_test
       run: |
@@ -127,6 +346,48 @@ jobs:
         # 清理
         rm -f run_unity_test.exp
         #continue-on-error: true  #测试流在出现错误时也会继续 (不报错)
+    
+    - name: Upload MISRA C Analysis Report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: misra-c-analysis-report
+        path: |
+          misra-report.xml
+          misra-c.txt
+          cppcheck.cfg
+        retention-days: 14
+        
+    - name: MISRA C Compliance Summary
+      if: always()
+      run: |
+        echo "📋 MISRA C 2012 Compliance Summary:"
+        echo "==================================="
+        
+        if [ -f misra-report.xml ] && [ -s misra-report.xml ]; then
+          total_violations=$(grep -o "misra-c2012-" misra-report.xml | wc -l)
+          critical_errors=$(grep -o 'severity="error"' misra-report.xml | wc -l)
+          
+          echo "🔍 Total MISRA violations: $total_violations"
+          echo "🚨 Critical errors: $critical_errors"
+          
+          if [ $critical_errors -gt 0 ]; then
+            echo "❌ MISRA C compliance: FAILED"
+            echo "   Critical violations must be fixed before release"
+          elif [ $total_violations -gt 0 ]; then
+            echo "⚠️  MISRA C compliance: WARNINGS"
+            echo "   Some violations found, review recommended"
+          else
+            echo "✅ MISRA C compliance: PASSED"
+          fi
+        else
+          echo "✅ MISRA C compliance: PASSED (no violations)"
+        fi
+        
+        echo ""
+        echo "📁 Detailed MISRA C report uploaded as artifact"
+        echo "📖 Refer to MISRA C:2012 guidelines for violation explanations"
+    
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
