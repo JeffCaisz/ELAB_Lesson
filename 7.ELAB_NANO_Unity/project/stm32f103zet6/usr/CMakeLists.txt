@@ -35,6 +35,7 @@ add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../../../mcu/stm32f103zet6 ${CMAKE_CU
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../../../elab ${CMAKE_CURRENT_BINARY_DIR}/elab_libaray)
 
 set(PRO_SRC
+
     main.c
     core/stm32f1xx_it.c
     core/stm32f1xx_hal_msp.c
@@ -42,6 +43,9 @@ set(PRO_SRC
     bsp/debug_uart.c
     bsp/syscalls.c
     bsp/sysmem.c
+    unity_test/unity_export.c
+    unity_test/test_demo.c
+
 )
 
 add_executable(${__PROJ_NAME__})
