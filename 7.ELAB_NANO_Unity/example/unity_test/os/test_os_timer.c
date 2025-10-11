@@ -75,7 +75,6 @@ TEST(ostimer, new_stop_delet_cmsis_timer)
     osStatus_t ret_os = osOK;
     timer = osTimerNew(timer_callback,osTimerPeriodic, NULL, &timer_attr_test);
     TEST_ASSERT_NOT_NULL(timer);
-    TEST_ASSERT_NULL(timer);
     ret_os = osTimerStart(timer, 1000);
     TEST_ASSERT_EQUAL_INT32(osOK, ret_os);
     ret_os = osTimerStop(timer);
