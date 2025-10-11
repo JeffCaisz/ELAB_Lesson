@@ -1,0 +1,269 @@
+version: "4.1"
+name: Template
+type: ARM
+deviceName: null
+packDir: null
+srcDirs: []
+virtualFolder:
+  name: <virtual_root>
+  files: []
+  folders:
+    - name: usr
+      files:
+        - path: ../../usr/main.c
+        - path: ../../usr/elab_config.h
+        - path: ../../usr/FreeRTOSConfig.h
+      folders: []
+    - name: core
+      files:
+        - path: ../../usr/core/stm32f1xx_hal_msp.c
+        - path: ../../usr/core/stm32f1xx_it.c
+        - path: ../../../../mcu/stm32f103zet6/CMSIS/Device/ST/STM32F1xx/Source/Templates/system_stm32f1xx.c
+        - path: ../../../../mcu/stm32f103zet6/CMSIS/Device/ST/STM32F1xx/Source/Templates/arm/startup_stm32f103xe.s
+      folders: []
+    - name: bsp
+      files:
+        - path: ../../usr/bsp/bsp.c
+        - path: ../../usr/bsp/debug_uart.c
+      folders: []
+    - name: stm32f1_hal
+      files:
+        - path: ../../../../mcu/stm32f103zet6/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal.c
+        - path: ../../../../mcu/stm32f103zet6/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_dma.c
+        - path: ../../../../mcu/stm32f103zet6/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_gpio.c
+        - path: ../../../../mcu/stm32f103zet6/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_gpio_ex.c
+        - path: ../../../../mcu/stm32f103zet6/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc.c
+        - path: ../../../../mcu/stm32f103zet6/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c
+        - path: ../../../../mcu/stm32f103zet6/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_uart.c
+        - path: ../../../../mcu/stm32f103zet6/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_usart.c
+        - path: ../../../../mcu/stm32f103zet6/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_conf.h
+        - path: ../../../../mcu/stm32f103zet6/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_cortex.c
+      folders: []
+    - name: elab
+      files: []
+      folders:
+        - name: elib
+          files:
+            - path: ../../../../elab/elib/elib_crc.c
+            - path: ../../../../elab/elib/elib_queue.c
+            - path: ../../../../elab/elib/hash_table.c
+          folders: []
+        - name: common
+          files:
+            - path: ../../../../elab/common/elab_assert.c
+            - path: ../../../../elab/common/elab_common.c
+            - path: ../../../../elab/common/elab_log.c
+            - path: ../../../../elab/common/elab_export.c
+          folders: []
+    - name: 3rd
+      files: []
+      folders:
+        - name: xfusion
+          files:
+            - path: ../../../../elab/3rd/xfusion/xf_utils_log/xf_utils_log_dump.c
+          folders: []
+        - name: component
+          files:
+            - path: ../../../../elab/3rd/list/list.c
+            - path: ../../../../elab/3rd/list/list_iterator.c
+            - path: ../../../../elab/3rd/list/list_node.c
+            - path: ../../../../elab/3rd/lwrb/lwrb.c
+            - path: ../../../../elab/3rd/ringbuf/ringbuf.c
+            - path: ../../../../elab/3rd/state_machine/state_machine.c
+          folders: []
+        - name: shell
+          files:
+            - path: ../../../../elab/3rd/Shell/shell.c
+            - path: ../../../../elab/3rd/Shell/shell_cmd_list.c
+            - path: ../../../../elab/3rd/Shell/shell_companion.c
+            - path: ../../../../elab/3rd/Shell/shell_ext.c
+          folders: []
+    - name: os
+      files: []
+      folders:
+        - name: freertos
+          files:
+            - path: ../../../../elab/3rd/FreeRTOS/croutine.c
+            - path: ../../../../elab/3rd/FreeRTOS/event_groups.c
+            - path: ../../../../elab/3rd/FreeRTOS/list.c
+            - path: ../../../../elab/3rd/FreeRTOS/queue.c
+            - path: ../../../../elab/3rd/FreeRTOS/stream_buffer.c
+            - path: ../../../../elab/3rd/FreeRTOS/tasks.c
+            - path: ../../../../elab/3rd/FreeRTOS/timers.c
+            - path: ../../../../elab/3rd/FreeRTOS/portable/RVDS/ARM_CM3/port.c
+            - path: ../../../../elab/3rd/FreeRTOS/portable/MemMang/heap_4.c
+          folders: []
+        - name: cmsis
+          files:
+            - path: ../../../../elab/os/mcu_os/cmsis_os2.c
+          folders: []
+    - name: unity
+      files:
+        - path: ../../../../elab/3rd/Unity/unity.c
+        - path: ../../../../elab/3rd/Unity/unity_fixture.c
+        - path: ../../../../elab/3rd/Unity/unity_memory.c
+      folders: []
+    - name: unity_test
+      files:
+        - path: ../../usr/unity_test/test_demo.c
+        - path: ../../usr/unity_test/unity_export.c
+      folders: []
+dependenceList: []
+outDir: build
+miscInfo:
+  uid: 5d6a07ead94610f7ed78543b37cf55b0
+targets:
+  Target 1:
+    cppPreprocessAttrs:
+      defineList:
+        - USE_HAL_DRIVER
+        - STM32F103xE
+      incList:
+        - ../../../../mcu/stm32f103zet6/STM32F1xx_HAL_Driver/Inc
+        - ../../../../mcu/stm32f103zet6/CMSIS/Include
+        - ../../../../mcu/stm32f103zet6/CMSIS/Device/ST/STM32F1xx/Include
+        - ../../usr/bsp
+        - ../../usr/core
+        - ../../../../elab/elib
+        - ../../../../elab/common
+        - ../../../../elab/3rd/list
+        - ../../../../elab/3rd/lwrb
+        - ../../../../elab/3rd/ringbuf
+        - ../../../../elab/3rd/state_machine
+        - ../../../../elab/3rd/xfusion/xf_common
+        - ../../../../elab/3rd/xfusion/xf_utils_log
+        - ../../../../elab/3rd/xfusion
+        - ../../../../elab/3rd/Shell
+        - ../../../../elab/os/mcu_os
+        - ../../../../elab/os
+        - ../../../../elab/3rd/FreeRTOS/include
+        - ../../../../elab/3rd/FreeRTOS/portable/RVDS/ARM_CM3
+        - ../../usr
+        - .cmsis/include
+        - ../keil/RTE/_Target 1
+        - ../../../../elab/3rd/Unity
+      libList: []
+    excludeList: []
+    toolchain: AC5
+    toolchainConfigMap:
+      AC5:
+        archExtensions: ""
+        cpuType: Cortex-M3
+        floatingPointHardware: none
+        options:
+          version: 4
+          afterBuildTasks: []
+          asm-compiler: {}
+          beforeBuildTasks: []
+          c/cpp-compiler:
+            CXX_FLAGS: --diag_suppress=1 --diag_suppress=1295
+            C_FLAGS: --diag_suppress=1 --diag_suppress=1295
+            c99-mode: true
+            enum-container-always-int: true
+            one-elf-section-per-function: true
+            optimization: level-0
+            warnings: all-warnings
+          global:
+            output-debug-info: enable
+          linker:
+            $outputTaskExcludes:
+              - .bin
+            output-format: elf
+            ro-base: "0x08000000"
+            rw-base: "0x20000000"
+        scatterFilePath: ../keil/Template.sct
+        storageLayout:
+          RAM:
+            - id: 1
+              isChecked: false
+              mem:
+                size: "0x0"
+                startAddr: "0x0"
+              noInit: false
+              tag: RAM
+            - id: 2
+              isChecked: false
+              mem:
+                size: "0x0"
+                startAddr: "0x0"
+              noInit: false
+              tag: RAM
+            - id: 3
+              isChecked: false
+              mem:
+                size: "0x0"
+                startAddr: "0x0"
+              noInit: false
+              tag: RAM
+            - id: 1
+              isChecked: true
+              mem:
+                size: "0x10000"
+                startAddr: "0x20000000"
+              noInit: false
+              tag: IRAM
+            - id: 2
+              isChecked: false
+              mem:
+                size: "0x0"
+                startAddr: "0x0"
+              noInit: false
+              tag: IRAM
+          ROM:
+            - id: 1
+              isChecked: false
+              isStartup: false
+              mem:
+                size: "0x0"
+                startAddr: "0x0"
+              tag: ROM
+            - id: 2
+              isChecked: false
+              isStartup: false
+              mem:
+                size: "0x0"
+                startAddr: "0x0"
+              tag: ROM
+            - id: 3
+              isChecked: false
+              isStartup: false
+              mem:
+                size: "0x0"
+                startAddr: "0x0"
+              tag: ROM
+            - id: 1
+              isChecked: true
+              isStartup: true
+              mem:
+                size: "0x80000"
+                startAddr: "0x8000000"
+              tag: IROM
+            - id: 2
+              isChecked: false
+              isStartup: false
+              mem:
+                size: "0x0"
+                startAddr: "0x0"
+              tag: IROM
+        useCustomScatterFile: true
+    uploadConfigMap:
+      JLink:
+        baseAddr: ""
+        bin: ""
+        cpuInfo:
+          cpuName: "null"
+          vendor: "null"
+        otherCmds: ""
+        proType: 1
+        speed: 8000
+      STLink:
+        address: "0x08000000"
+        bin: ""
+        elFile: None
+        optionBytes: .eide/target 1.st.option.bytes.ini
+        otherCmds: ""
+        proType: SWD
+        resetMode: default
+        runAfterProgram: true
+        speed: 4000
+    uploader: STLink

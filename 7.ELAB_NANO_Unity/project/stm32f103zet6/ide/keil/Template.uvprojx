@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F103xE</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\..\mcu\stm32f103zet6\STM32F1xx_HAL_Driver\Inc;..\..\..\..\mcu\stm32f103zet6\CMSIS\Include;..\..\..\..\mcu\stm32f103zet6\CMSIS\Device\ST\STM32F1xx\Include;..\..\usr\bsp;..\..\usr\core;..\..\..\..\elab\elib;..\..\..\..\elab\common;..\..\..\..\elab\3rd\list;..\..\..\..\elab\3rd\lwrb;..\..\..\..\elab\3rd\ringbuf;..\..\..\..\elab\3rd\state_machine;..\..\..\..\elab\3rd\xfusion\xf_common;..\..\..\..\elab\3rd\xfusion\xf_utils_log;..\..\..\..\elab\3rd\xfusion;..\..\..\..\elab\3rd\Shell;..\..\..\..\elab\os\mcu_os;..\..\..\..\elab\os;..\..\..\..\elab\3rd\FreeRTOS\include;..\..\..\..\elab\3rd\FreeRTOS\portable\RVDS\ARM_CM3;..\..\usr</IncludePath>
+              <IncludePath>..\..\..\..\mcu\stm32f103zet6\STM32F1xx_HAL_Driver\Inc;..\..\..\..\mcu\stm32f103zet6\CMSIS\Include;..\..\..\..\mcu\stm32f103zet6\CMSIS\Device\ST\STM32F1xx\Include;..\..\usr\bsp;..\..\usr\core;..\..\..\..\elab\elib;..\..\..\..\elab\common;..\..\..\..\elab\3rd\list;..\..\..\..\elab\3rd\lwrb;..\..\..\..\elab\3rd\ringbuf;..\..\..\..\elab\3rd\state_machine;..\..\..\..\elab\3rd\xfusion\xf_common;..\..\..\..\elab\3rd\xfusion\xf_utils_log;..\..\..\..\elab\3rd\xfusion;..\..\..\..\elab\3rd\Shell;..\..\..\..\elab\os\mcu_os;..\..\..\..\elab\os;..\..\..\..\elab\3rd\FreeRTOS\include;..\..\..\..\elab\3rd\FreeRTOS\portable\RVDS\ARM_CM3;..\..\usr;..\..\..\..\elab\3rd\Unity</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -437,6 +437,21 @@
               <FileName>debug_uart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\usr\bsp\debug_uart.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>unity_test</GroupName>
+          <Files>
+            <File>
+              <FileName>test_demo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\usr\unity_test\test_demo.c</FilePath>
+            </File>
+            <File>
+              <FileName>unity_export.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\usr\unity_test\unity_export.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -607,6 +622,26 @@
               <FileName>shell_ext.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\elab\3rd\Shell\shell_ext.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>3rd/unity</GroupName>
+          <Files>
+            <File>
+              <FileName>unity.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\elab\3rd\Unity\unity.c</FilePath>
+            </File>
+            <File>
+              <FileName>unity_fixture.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\elab\3rd\Unity\unity_fixture.c</FilePath>
+            </File>
+            <File>
+              <FileName>unity_memory.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\elab\3rd\Unity\unity_memory.c</FilePath>
             </File>
           </Files>
         </Group>
